@@ -3,34 +3,27 @@ import Navbar from "../components/Navbar";
 
 export default function MainLayout() {
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* Header/Navbar */}
+    <div className="flex min-h-screen flex-col bg-white">
+
+      {/* Navbar */}
       <Navbar />
 
-      {/* Search & Filter */}
-      <header className="bg-gray-100 p-4 flex flex-col md:flex-row gap-2 justify-between items-center">
-        <input
-          type="text"
-          placeholder="Cari produk..."
-          className="w-full md:w-1/3 px-4 py-2 border rounded-lg"
-        />
-        <select className="px-4 py-2 border rounded-lg">
-          <option>Semua Kategori</option>
-          <option>Elektronik</option>
-          <option>Fashion</option>
-          <option>Kecantikan</option>
-        </select>
-      </header>
-
-      {/* Main Section */}
-      <main className="flex-1 p-6">
+      {/* Main Content */}
+      <main className="flex-1 px-4 py-6 md:px-6 lg:px-8">
         <Outlet />
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white text-center p-4">
-        <p>© 2025 E-Commerce Simple App | Version 1.0</p>
+      <footer className="border-t border-pink-100 bg-[#2B2024] px-6 py-6 text-center text-white">
+        <p className="text-sm">
+          © 2026 KiaBeauty. All rights reserved.
+        </p>
+
+        <p className="mt-1 text-xs tracking-widest text-pink-200">
+          BEAUTY, MADE SIMPLE
+        </p>
       </footer>
+
     </div>
   );
 }

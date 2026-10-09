@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import Products from "./pages/frontpages/Products";
 import AdminDashboard from "./pages/adminpages/AdminDashboard";
 import AdminLayout from "./layouts/AdminLayout";
 import AboutPage from "./pages/adminpages/AboutPage";
@@ -19,6 +20,7 @@ export default function App() {
       <Route path="/logout" element={<LogoutPage />} />
       <Route path="/" element={<MainLayout />}>
         <Route index element={<Dashboard />} />
+        <Route path="produk" element={<Products />} />
         <Route path="product/:id" element={<ProductDetail />} />
         <Route path="cart" element={<Cart />} />
         <Route path="checkout" element={<Checkout />} />

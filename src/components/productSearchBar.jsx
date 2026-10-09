@@ -1,67 +1,96 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useCart } from "../utils/CartContext";
 
-export default function ProductSearchBar({ onSearch, categories }) {
-  const [keyword, setKeyword] = useState("");
-  const [category, setCategory] = useState("");
-  const navigate = useNavigate();
+export default function ProductCard({ p }) {
+  const { addToCart } = useCart();
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    onSearch({ keyword, category });
-  };
-
-  const handleAddProduct = () => {
-    navigate("/admin/add-product");
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      maximumFractionDigits: 0,
+    }).format(price);
   };
 
   return (
-    <div className="flex flex-col md:flex-row md:items-center md:justify-between bg-white shadow-md rounded-xl p-4 mb-6 space-y-3 md:space-y-0">
-      {/* Bagian Form Search */}
-      <form
-        onSubmit={handleSearch}
-        className="flex flex-col sm:flex-row items-stretch gap-3 w-full md:w-auto"
-      >
-        {/* Dropdown Kategori */}
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="border border-gray-300 rounded-lg p-2 text-gray-700 w-full sm:w-48 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option value="">Semua Kategori</option>
-          {categories &&
-            categories.map((cat) => (
-              <option key={cat.id} value={cat.id}>
-                {cat.name}
-              </option>
-            ))}
-        </select>
+    <div className="group overflow-hidden rounded-2xl bg-white border border-pink-100 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+      
+      {/* Product Image */}
+      <Link to={`/product/${p.slug}`} state={p}>
+        <div className="relative aspect-square overflow-hidden bg-[#FFF5F7]">
+          <img
+            src={p.img}
+            alt={p.name}
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
 
-        {/* Input Kata Kunci */}
-        <input
-          type="text"
-          value={keyword}
-          onChange={(e) => setKeyword(e.target.value)}
-          placeholder="Cari produk..."
-          className="border border-gray-300 rounded-lg p-2 flex-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+          {/* Category Badge */}
+          <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-medium text-[#A84D70] shadow-sm backdrop-blur">
+            {p.category_name}
+          </span>
 
-        {/* Tombol Cari */}
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200"
-        >
-          Cari
-        </button>
-      </form>
+          {/* Stock Badge */}
+          {p.stock <= 5 && (
+            <span className="absolute right-3 top-3 rounded-full bg-[#A84D70] px-3 py-1 text-xs font-medium text-white">
+              Stok Terbatas
+            </span>
+          )}
+        </div>
+      </Link>
 
-      {/* Tombol Tambah Produk */}
-      <button
-        onClick={handleAddProduct}
-        className="bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 transition duration-200 shadow-sm"
-      >
-        + Tambah Produk
-      </button>
+      {/* Product Information */}
+      <div className="p-4">
+        
+        {/* Rating */}
+        <div className="mb-2 flex items-center gap-1 text-sm">
+          <span className="text-yellow-500">★</span>
+          <span className="font-medium text-gray-700">
+            {p.rating}
+          </span>
+          <span className="text-gray-400">
+            · {p.stock} tersedia
+          </span>
+        </div>
+
+        {/* Product Name */}
+        <Link to={`/product/${p.slug}`} state={p}>
+          <h2 className="line-clamp-2 min-h-[48px] text-base font-semibold text-[#2B2024] transition-colors hover:text-[#A84D70]">
+            {p.name}
+          </h2>
+        </Link>
+
+        {/* Price */}
+        <div className="mt-3">
+          <p className="text-lg font-bold text-[#A84D70]">
+            {formatPrice(p.price)}
+          </p>
+        </div>
+
+        {/* Actions */}
+        <div className="mt-4 flex gap-2">
+          
+          <Link
+            to={`/product/${p.slug}`}
+            state={p}
+            className="flex-1 rounded-xl border border-[#D98FA7] px-3 py-2.5 text-center text-sm font-medium text-[#A84D70] transition hover:bg-[#FFF1F5]"
+          >
+            Lihat Detail
+          </Link>
+
+          <button
+            onClick={() => addToCart(p)}
+            disabled={p.stock <= 0}
+            className={`rounded-xl px-4 py-2.5 text-sm font-medium text-white transition ${
+              p.stock <= 0
+                ? "cursor-not-allowed bg-gray-300"
+                : "bg-[#A84D70] hover:bg-[#8F3E5E]"
+            }`}
+          >
+            {p.stock <= 0 ? "Habis" : "+ Keranjang"}
+          </button>
+
+        </div>
+      </div>
     </div>
   );
 }
