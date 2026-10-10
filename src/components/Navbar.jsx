@@ -80,7 +80,7 @@ export default function Navbar() {
             title="Akun"
             className="shrink-0 p-1 text-2xl text-white transition hover:text-pink-100"
           >
-            ♙
+            👤
           </Link>
         </div>
       </div>
